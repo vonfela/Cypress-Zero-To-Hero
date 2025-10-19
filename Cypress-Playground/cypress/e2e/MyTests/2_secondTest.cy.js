@@ -149,8 +149,8 @@ it('Extracting Values', () => {
     })
 
     // 2. Using .invoke() method
-    cy.get('[for="exampleInputEmail1"]').invoke('text').then(emailLabel => {  // What this method does, this method can run os invoke different JQuery functions so .text() is technically JQuery function for example.
-        console.log(emailLabel)                                               // then we just need to use the variable created to use/invoke this text value invoked from the selector
+    cy.get('[for="exampleInputEmail1"]').invoke('text').then(emailLabel => {  // What this method does, this method can run or invoke different JQuery functions so .text() is technically JQuery function for example.
+        console.log(emailLabel)                                               // then we just need to use the variable created to use/invoke this text value that is already invoked from the selector.
     })
     cy.get('[for="exampleInputEmail1"]').invoke('text').as('emailLabel')    // and it also works as alias
     cy.get('[for="exampleInputEmail1"]').should('contain', 'Email address')     // but the method invoke is just to relate to project and stuffs, if you just need to assert, .should() method is always the best option
