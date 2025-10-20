@@ -213,6 +213,5 @@ it.only('Timeouts', () => {
     cy.contains('Dialog').click()
 
     cy.contains('Open with delay 10 seconds').click()
-    cy.get('nb-dialog-container nb-card-header', {timeout: 11000}).should('have.text', 'Friendly reminder')  // In this manner we are changing/configuring the Cypress`s default wait timeout in command level.
+    cy.get('nb-dialog-container nb-card-header', {timeout: 11000}).should('have.text', 'Friendly reminder')  // In this manner we are changing/configuring the Cypress`s default wait timeout in command level. You need to pass the flag to change the wait in the action method, not in th assertion method.
 })
-
