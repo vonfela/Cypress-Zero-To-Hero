@@ -148,12 +148,35 @@ it('Tooltips', () => {
 // and
 // 2. The second one is native for the browser 
 
-it.only('Dialog boxes', () => {
+it('Dialog boxes', () => {
     cy.contains('Tables & Data').click()
     cy.contains('Smart Table').click()
 
+    cy.get('.nb-trash').first().click() // We want to get the first trash can but all the trash cans have the same class which is nb-trash, but they are in a table, listed, so as example we will use the first one so we can use method .first(), is this was not the case we could get the list of this table and navigate/validate using method equal and selecting the rows we want as index options. Also, it was a successful deletion because there was the browser`s confirmation message printed on the last step on the cypress runner, so the trick is that Cypress is configured by default to accept this kind of window, if it pops up, it's default behavior to "click" to close.
+    
+    // There is two ways to validade this type of native browser dialog boxes:
+    // 1. .on() method will listen on different event triggered by the browser and we are looking for window:confirm event, this event is fired when the dialog box shows up, then we are looking into this confirm object and we can make validation right away.
+    cy.on('window:confirm', confirm => {
+        expect(confirm).to.equal('Are you sure you want to delete?')
+    })
+
+    // But this approach has a little issue. So the problem is that cy.on() will work only when this event is triggered, so when window:confirm happend then we can catch the message inside of this window and make a validation. But if window:confirm was not actually fired it up then that is a problem, then we will not know that and we will not be able to validate not just the message but the window overall and because of that there is a second approach which is a little bit more advanced but it will guarantee that if for some reason the dialog box did not show up we will know about it. 
+
+    // 2. This second approach (and more reliable way) which is a little bit more advanced but it will guarantee that if for some reason the dialog box did not show up we will know about it. 
+    cy.window().then( win => {      // So for that we need to call cy.window object .then() we get this object (win) and then create cy.stub()
+        cy.stub(win, 'confirm').as('dialogBox').returns(true)     // What cy.stub() does, technically we kind of replacing the Cypress native browser native confirm window confirm function with our own custom function, and then from that we drive the behavior of this function by ourselves. the return arguments you set/manipulate if the dialogbox will be accepted or canceled.
+    })
+
+    cy.get('.nb-trash').first().click()
+    cy.get('@dialogBox').should('be.calledWith', 'Are you sure you want to delete?')
 
 
+})
 
 
+//_____________________________________________________39. WEB TABLES (part 1), Seção 5:
+
+it.only('Web tables', () => {
+
+    
 })
