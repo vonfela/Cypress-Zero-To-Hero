@@ -134,12 +134,26 @@ it('Lists and Dropdowns', () => {
 //_____________________________________________________37. TOOLTIPS, Seção 5:
 // It's quite a tricky web element!
 
-it.only('Tooltips', () => {
+it('Tooltips', () => {
     cy.contains('Modal & Overlays').click()
     cy.contains('Tooltip').click()
 
-    cy.contains('button', 'Top').trigger('mouseenter')           // Ok, unfirtunately Cypress does not have method hover but there is a workaround, you can use method trigger and then trigger the event that this button brings up this tooltip. Here we are getting the web element frist by tag <button> and child text 'top' and then triggering the event mouseenter (to find this event specifically you can use the browser's developer tools, inspect the element and on the event listener tab, disabling the ancestors checkbox).
+    cy.contains('button', 'Top').trigger('mouseenter')           // Ok, unfortunately Cypress does not have method hover but there is a workaround, you can use method trigger and then trigger the event that this button brings up this tooltip. Here we are getting the web element frist by tag <button> and child text 'top' and then triggering the event mouseenter (to find this event specifically you can use the browser's developer tools, inspect the element and on the event listener tab, disabling the ancestors checkbox).
     cy.get('nb-tooltip').should('have.text', 'This is a tooltip')
 })
 
 //_____________________________________________________38. DIALOG BOXES, Seção 5:
+// Basically there are two type of those:
+// 1. One are native for the web application
+// and
+// 2. The second one is native for the browser 
+
+it.only('Dialog boxes', () => {
+    cy.contains('Tables & Data').click()
+    cy.contains('Smart Table').click()
+
+
+
+
+
+})
