@@ -25,7 +25,7 @@ it('Locators Syntaxes', () => {
     // by attribute with value 
     cy.get('[placeholder="Email"]')
 
-    // by entire class value
+    // by entire class  value
     cy.get('[class="input-full-width size-medium status-basic shape-rectangle nb-transition"]')
 
     // how to combine several attributes? just put them one after another all together
