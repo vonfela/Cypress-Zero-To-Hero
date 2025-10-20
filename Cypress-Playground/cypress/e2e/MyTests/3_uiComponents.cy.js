@@ -175,8 +175,10 @@ it('Dialog boxes', () => {
 
 
 //_____________________________________________________39. WEB TABLES (part 1), Seção 5:
+// In this first part we will learn HOW TO NAVIGATE
+// This is considered one of the most difficult UI components to automate at least one of the most confusing
 
 it.only('Web tables', () => {
 
-    
+
 })
