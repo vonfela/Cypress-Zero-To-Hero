@@ -81,7 +81,7 @@ it('Checkboxes', () => {
 })
 
 // This is the feature of this method .check(), so technically check or uncheck method not only click/check on the checkbox, it's set the state for the checkbox, so if you want checkbox to be checked regardless of the current state of the checkbox, the checkbox will be selected or unselected, so compared to the .click() command/method it just doesn't care. Click method acts different, it reverses the current state that the element are in, for exemple if the checkbox is checked and we click on it, it will be unchecked.
-// Another IMPORTANT thing to notice is that as we are getting our locator as all checkboxes on the page, the .check() method will check/uncheck all elements found, if we use .click() method it will not work the same way because can perform only on a single element. But .click() method has a second flag called {multiple: true} and using this flag it will work clicking on all elements founds and not just obligating me to select one specif or use .check() method but it is still preferible to use .check() method.
+// Another. IMPORTANT thing to notice is that as we are getting our locator as all checkboxes on the page, the .check() method will check/uncheck all elements found, if we use .click() method it will not work the same way because can perform only on a single element. But .click() method has a second flag called {multiple: true} and using this flag it will work clicking on all elements founds and not just obligating me to select one specif or use .check() method but it is still preferible to use .check() method.
 
 
 
@@ -179,6 +179,14 @@ it('Dialog boxes', () => {
 // This is considered one of the most difficult UI components to automate at least one of the most confusing
 
 it.only('Web tables', () => {
+    cy.contains('Tables & Data').click()
+    cy.contains('Smart Table').click()
 
+    cy.get('tbody').contains('tr', 'Larry').then( tableRow => {
+        cy.wrap(tableRow).find('.nb-edit').click()
+        cy.wrap(tableRow).find('[placeholder="Age"]').clear().type('35')
+        cy.wrap(tableRow).find('.nb-checkmark').click()
+        cy.wrap(tableRow).find('td').last().should('have.text', '35')
+    })
 
 })
