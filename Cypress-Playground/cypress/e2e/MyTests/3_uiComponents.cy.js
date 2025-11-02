@@ -178,15 +178,37 @@ it('Dialog boxes', () => {
 // In this first part we will learn HOW TO NAVIGATE
 // This is considered one of the most difficult UI components to automate at least one of the most confusing
 
-it.only('Web tables', () => {
+it.only('Web tables part 1', () => {
     cy.contains('Tables & Data').click()
     cy.contains('Smart Table').click()
 
+    // 1. How to find by text, table row has unique value to use as unique identifier so we just need to find the row with the value Lary and wrap it to use however we want.
     cy.get('tbody').contains('tr', 'Larry').then( tableRow => {
         cy.wrap(tableRow).find('.nb-edit').click()
         cy.wrap(tableRow).find('[placeholder="Age"]').clear().type('35')
         cy.wrap(tableRow).find('.nb-checkmark').click()
         cy.wrap(tableRow).find('td').last().should('have.text', '35')
     })
+
+    // 2. How to find by index, Let's sey you don't have identifiers and you would need to use index.
+    cy.get('.nb-plus').click()
+    cy.get('thead tr').eq(2).then(tableRow => {
+        cy.wrap(tableRow).find('[placeholder="First Name"]').type('Felinha')
+        cy.wrap(tableRow).find('[placeholder="Last Name"]').type('Von')
+        cy.wrap(tableRow).find('.nb-checkmark').click()
+    })
+
+    cy.get('tbody tr').first().find('td').then(tableColumns => {
+        cy.wrap(tableColumns).eq(2).should('have.text','Felinha')
+        cy.wrap(tableColumns).eq(3).should('have.text', 'Von')
+    })
+
+//_____________________________________________________40. WEB TABLES (part 2), Seção 5:
+// How to validade every row in the table with some particular value
+
+    // 3. Looping though the rows
+
+
+
 
 })
