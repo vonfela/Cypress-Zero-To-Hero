@@ -9,6 +9,6 @@ module.exports = defineConfig({
   },
   viewportWidth: 1280,
   viewportHeight: 720,
-  defaultCommandTimeout: 11000,   // default timout changed that Cypress native waits before returning the result, in this case we are changing in the framework level.
+  defaultCommandTimeout: 4000,   // default timout changed that Cypress native waits before returning the result, in this case we are changing in the framework level.
 
 });

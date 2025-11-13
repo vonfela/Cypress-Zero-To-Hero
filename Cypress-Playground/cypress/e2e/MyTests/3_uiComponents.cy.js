@@ -178,7 +178,7 @@ it('Dialog boxes', () => {
 // In this first part we will learn HOW TO NAVIGATE
 // This is considered one of the most difficult UI components to automate at least one of the most confusing
 
-it.only('Web tables part 1', () => {
+it('Web tables part 1', () => {
     cy.contains('Tables & Data').click()
     cy.contains('Smart Table').click()
 
@@ -208,7 +208,29 @@ it.only('Web tables part 1', () => {
 
     // 3. Looping though the rows
 
+    const ages = [20, 30, 40, 200]
+
+    cy.wrap(ages).each( age => {
+        cy.get('[placeholder="Age"]').clear().type(age)
+        cy.wait(500)    // If was not for this wait the test would break because there is a delay when filtering which detach from DOM. THIS IS NOT A GOOD PRACTICE try to avoid use .wait() method but there is situations that this is the only way, like in this scenario.
+        cy.get('tbody tr').each( tableRows => {
+            if(age == 200){
+                cy.wrap(tableRows).should('contain.text', 'No data found')
+            } else {
+                cy.wrap(tableRows).find('td').last().should('have.text', age)
+            }   
+        })
+    })
 
 
+})
+
+//_____________________________________________________41. DATE PICKERS (part 1), Seção 5:
+// Date Picker is also quite a tricky component to automate for two reasons:
+// 1. The design of the component
+// 2. Time, which is continuously moving.
+
+
+it.only('Date Pickers part 1', () => {
 
 })

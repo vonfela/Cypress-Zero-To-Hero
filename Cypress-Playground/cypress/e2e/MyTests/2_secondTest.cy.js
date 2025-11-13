@@ -16,7 +16,7 @@ it('Locators Syntaxes', () => {
     //by ID value
     cy.get('#inputEmail')
 
-    // by class value (single value, because this class has multiples values)
+    // by class value or attribute value (single value, because this class has multiples values)
     cy.get('.input-full-width')
 
     // by attribute (attribute name)
