@@ -231,6 +231,38 @@ it('Web tables part 1', () => {
 // 2. Time, which is continuously moving.
 
 
-it.only('Date Pickers part 1', () => {
+it('Date Pickers part 1', () => {
+    cy.contains('Forms').click()
+    cy.contains('Datepicker').click()
 
+    cy.get('[placeholder="Form Picker"]').then(input => {
+        cy.wrap(input).click()
+        cy.get('.day-cell').not('.bounding-month').contains('12').click()
+    })
+
+})
+
+//_____________________________________________________42. DATE PICKERS (part 2), Seção 5:
+// Date Picker is also quite a tricky component to automate for two reasons:
+// 1. The design of the component
+// 2. Time, which is continuously moving.
+
+it.only('Date Pickets part 2', () => {
+    cy.contains('Forms').click()
+    cy.contains('Datepicker').click()
+
+    let date = new Date()
+    date.setDate(date.getDate() + 50)
+    let futureDay = date.getDate()
+    let dateToAssert = `Aug ${futureDay}, 2025`
+
+    cy.get('[placeholder="Form Picker"]').then(input => {
+        cy.wrap(input).click()
+
+
+
+
+        cy.get('.day-cell').not('.bounding-month').contains(futureDay).click()
+        cy.wrap(input).should('have.value', dateToAssert)
+    })
 })
