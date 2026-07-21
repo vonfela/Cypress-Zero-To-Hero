@@ -235,9 +235,16 @@ it('Date Pickers part 1', () => {
     cy.contains('Forms').click()
     cy.contains('Datepicker').click()
 
-    cy.get('[placeholder="Form Picker"]').then(input => {
-        cy.wrap(input).click()
-        cy.get('.day-cell').not('.bounding-month').contains('12').click()
+    let date = new Date() // Here we are creating a 'date'variable to receive the current date (Date() is the javaScript object to get the current date)
+    date.setDate(date.getDate() + 5)  // here we are setting the date variable that we created to get the current date + 5 days
+    let futureDay = date.getDate() // Here we are creating another variable to hold only the current day+5 days to let dynamic
+    let dateToAssert = `Jun ${futureDay}, 2026` // Here we are letting the assertion dynamic, which is validating the currentdate+5days that we called futureDay (using interpolation to interpolate/use the futureday variable into the text)
+
+    cy.get('[placeholder="Form Picker"]').then(input => { // Here we found the element of the datepicker .then store it in a variable to...
+
+        cy.wrap(input).click() // ... Re-use here with the .wrap method, and now we just click on the calendar that we stored above
+        cy.get('.day-cell').not('.bounding-month').contains(futureDay).click() // Get day cells (which is the days available to current month selected) but not with bounding-month.search for day of the month and click
+        cy.wrap(input).should('have.value', dateToAssert)
     })
 
 })
@@ -247,22 +254,95 @@ it('Date Pickers part 1', () => {
 // 1. The design of the component
 // 2. Time, which is continuously moving.
 
-it.only('Date Pickets part 2', () => {
+// In the previous lesson we learned how to deal with datepickers, selecing a day, using a javascript object to get the current date and then we do whatever we want, we this case we are getting futuredate, but now we got in a problem which is +50 days, because it should change months but it`s loopin throug the month, thois is why whe only dealt with the day, not the month or year, in this second part of datepickers we will learn how to deal with this scenario.
+
+it('Date Pickets part 2', () => {
     cy.contains('Forms').click()
     cy.contains('Datepicker').click()
 
-    let date = new Date()
-    date.setDate(date.getDate() + 50)
-    let futureDay = date.getDate()
-    let dateToAssert = `Aug ${futureDay}, 2025`
-
-    cy.get('[placeholder="Form Picker"]').then(input => {
-        cy.wrap(input).click()
 
 
+    function selectDateFromCurrentDay(day){
+        let date = new Date()
+        date.setDate(date.getDate() + day)
+        let futureDay = date.getDate()
+        let futureMonthLong = date.toLocaleDateString('en-US', { month: 'long'}) // Here we are hold the long format for the opened calendar
+        let futureMonthShort = date.toLocaleDateString('en-US', { month: 'short'}) // same but for the short format for when the date ir alredy selected and the calendar is closed.
+        let futureYear = date.getFullYear() // Here we are creating and variable to hold the year using a javascvript object getFullYear
+        let dateToAssert = `${futureMonthShort} ${futureDay}, ${futureYear}`
 
+        cy.get('nb-calendar-view-mode').invoke('text').then(calendarMonthAndYear => { // Here we are getting the calendar current month and year when it's open and invoking it's text then holding in a variable called calendarMonthAndYear so we can use later
+            if(!calendarMonthAndYear.includes(futureMonthLong) || !calendarMonthAndYear.includes(futureYear)){ // if calendarMonthAndYear DOES NOT(!) include futureMonthLong OR(||) calendarMonthAndYear DOES NOT(!) includes futureYear...
+                cy.get('[data-name="chevron-right"]').click() // ... Then i want to click on the button to go to next month
+                selectDateFromCurrentDay(day) // This is why this is a recursive function, why it calls itself, because it can self call after to loop into the logic/algorithm, to repeat until the condition is satisfied
+            }
+            else {
+                cy.get('.day-cell').not('.bounding-month').contains(futureDay).click()       
+            }
+        })
+        return dateToAssert
+    }
 
-        cy.get('.day-cell').not('.bounding-month').contains(futureDay).click()
+    cy.get('[placeholder="Form Picker"]').then(input => { // Here we found the element of the datepicker .then store it in a variable to...
+        cy.wrap(input).click() // ... Re-use here with the .wrap method, and now we just click on the calendar that we stored above
+        const dateToAssert = selectDateFromCurrentDay(200)
         cy.wrap(input).should('have.value', dateToAssert)
+    })
+})
+
+
+
+//_____________________________________________________43. SLIDERS, Seção 5:
+// 
+// 
+// 
+// 
+
+it('Sliders', () => {
+    cy.get('[tabtitle="Temperature"] circle') // Here we are getting the parent element which is the Temperature slider and then the button which is the circle
+        .invoke('attr', 'cx', '38.66') // then we invoke the attribute of the element (circle button) and set a value that we want for it
+        .invoke('attr', 'cy', '57.75')
+        .click()
+    cy.get('[class="value temperature h1"]').should('contain.text', '18')
+
+
+})
+
+//_____________________________________________________44. DRAG & DROP, Seção 5:
+// 
+// 
+// 
+// 
+
+it('Drag&Drop', () => {
+    cy.contains('Extra Components').click()
+    cy.contains('Drag & Drop').click()
+
+    cy.get('#todo-list div').first().trigger('dragstart') // Here we get the element parent which is the list/table with the dragabble elements and the chiled which is the div, then we select the first option of this list and trigger the element event that you can see at Event lisneters tab at DOM
+    cy.get('#drop-list').trigger('drop') // Here we get the element target where we want to put the element we are getting andr triggering the drop event at that target that you can also see at Event Listeners tab at DOM.
+})
+
+
+//_____________________________________________________45. iFRAMES, Seção 5:
+// Cypress is not friendly with iFrames, also Cypress does not have a native support for iFrames
+// iFrame is the web page inside of the web page
+// So you need to install a plugin: cypress-iframe
+//command to install cypress-iframe: npm i cypress-iframe --save-dev (the save dev is important so the cypress iframe will be added as a dependency of the project)
+// Then you will see the cypress iframe added as a dependency at package.json
+// and you also need to add/import cypress-iframe as a command at command.js
+
+it('iFrames', () => {
+    cy.contains('Modal & Overlays').click()
+    cy.contains('Dialog').click()
+    cy.frameLoaded('[data-cy="esc-close-iframe"]') // Here we are using the frameLoaded() method to store the iframe target
+
+    cy.iframe('[data-cy="esc-close-iframe"]').contains('Open Dialog with esc close').click() // Then we first invoke our taget iframe with iframe() method with the same locator at frameLoaded() above, so then we can interact with the elements inside the iframe following with contains and click.
+    cy.contains('Dismiss Dialog').click() // Here we already used/pass from the iframe, now this dialog box is outside the iframe so we can automate like usualy
+
+    cy.enter('[data-cy="esc-close-iframe"]').then( getBody => { // This is the option number two to when you need to interact with several elements within the same iframe, so instead of calling iframe() method again and again what you can do is use enter() method
+        getBody().contains('Open Dialog with esc close').click() // You provide the frame and .then() you can use this getBody() method to interact with elements within the iframe
+        cy.contains('Dismiss Dialog').click()
+        getBody().contains('Open Dialog without esc close').click() // Here we are clicking on the second element within this same iFrame
+        cy.contains('OK').click()
     })
 })
