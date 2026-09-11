@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Cypress test artifacts (generated at runtime)
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+Notes.js
+
+
+# Logs
+npm-debug.log*
+*.log
+
+# Environment files (never commit secrets)
+.env
+.env.*

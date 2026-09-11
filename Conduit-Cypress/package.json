@@ -1,0 +1,10 @@
+{
+  "name": "conduit-cypress",
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "cypress": "^16.0.0"
+  }
+}
